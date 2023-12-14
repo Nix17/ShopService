@@ -16,7 +16,7 @@ namespace ShopService
                 .Build();
 
             // Если TRUE, то данные в SQLite, иначе InMemoryStream и CSV
-            bool? isSqlite = cfg.GetValue<bool>("StorageSettings:sqlite");
+            bool? isSqlite = cfg.GetValue<bool>("StorageSettings:UseSqlite");
 
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
