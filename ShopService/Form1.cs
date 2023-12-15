@@ -52,6 +52,8 @@ namespace ShopService
                 dtGridProviderProducts.Rows.Add();
                 dtGridProviderProducts.Rows[idxRow].Cells[0].Value = product.Id;
                 dtGridProviderProducts.Rows[idxRow].Cells[1].Value = product.Name;
+                dtGridProviderProducts.Rows[idxRow].Cells[2].Value = "";
+                dtGridProviderProducts.Rows[idxRow].Cells[3].Value = "";
 
                 idxRow++;
             }
@@ -98,6 +100,37 @@ namespace ShopService
                 txtBoxProviderStoreAddress.Text = "";
                 txtBoxProviderStoreName.Text = "";
             }
+        }
+
+        private void btnProviderDelivery_Click(object sender, EventArgs e)
+        {
+            var l = MakeDelivery();
+        }
+
+        private List<ProductBatchForm> MakeDelivery()
+        {
+            var list = new List<ProductBatchForm>();
+
+            for (int i = 0; i <= dtGridProviderProducts.Rows.Count; i++)
+            {
+
+                //if (string.IsNullOrEmpty(dtGridProviderProducts.Rows[i].Cells[2].Value.ToString()))
+                //{
+                //    continue;
+                //}
+
+                //if (string.IsNullOrEmpty(dtGridProviderProducts.Rows[i].Cells[3].Value.ToString()))
+                //{
+                //    continue;
+                //}
+
+                int productId = Convert.ToInt32(dtGridProviderProducts.Rows[i].Cells[0].Value);
+                decimal price = Convert.ToDecimal(dtGridProviderProducts.Rows[i].Cells[2].Value);
+                int quantity = Convert.ToInt32(dtGridProviderProducts.Rows[i].Cells[3].Value);
+                var store = cmbBoxProviderStores.SelectedItem;
+            }
+
+            return list;
         }
     }
 }

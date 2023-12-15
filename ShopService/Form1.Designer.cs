@@ -39,7 +39,7 @@
             label2 = new Label();
             txtBoxProviderStoreName = new TextBox();
             label1 = new Label();
-            button3 = new Button();
+            btnProviderDelivery = new Button();
             dtGridProviderProducts = new DataGridView();
             ImportGoodId = new DataGridViewTextBoxColumn();
             ImportGoodName = new DataGridViewTextBoxColumn();
@@ -91,7 +91,7 @@
             tabPage1.Controls.Add(label2);
             tabPage1.Controls.Add(txtBoxProviderStoreName);
             tabPage1.Controls.Add(label1);
-            tabPage1.Controls.Add(button3);
+            tabPage1.Controls.Add(btnProviderDelivery);
             tabPage1.Controls.Add(dtGridProviderProducts);
             tabPage1.Controls.Add(label5);
             tabPage1.Controls.Add(cmbBoxProviderStores);
@@ -203,15 +203,16 @@
             label1.Text = "Название магазина";
             label1.UseWaitCursor = true;
             // 
-            // button3
+            // btnProviderDelivery
             // 
-            button3.Location = new Point(337, 207);
-            button3.Margin = new Padding(3, 4, 3, 4);
-            button3.Name = "button3";
-            button3.Size = new Size(86, 31);
-            button3.TabIndex = 7;
-            button3.Text = "Завезти";
-            button3.UseVisualStyleBackColor = true;
+            btnProviderDelivery.Location = new Point(337, 207);
+            btnProviderDelivery.Margin = new Padding(3, 4, 3, 4);
+            btnProviderDelivery.Name = "btnProviderDelivery";
+            btnProviderDelivery.Size = new Size(86, 31);
+            btnProviderDelivery.TabIndex = 7;
+            btnProviderDelivery.Text = "Завезти";
+            btnProviderDelivery.UseVisualStyleBackColor = true;
+            btnProviderDelivery.Click += btnProviderDelivery_Click;
             // 
             // dtGridProviderProducts
             // 
@@ -455,7 +456,7 @@
         private ComboBox cmbBoxProviderStores;
         private TabPage tabPage2;
         private DataGridView dtGridProviderProducts;
-        private Button button3;
+        private Button btnProviderDelivery;
         private Button button4;
         private DataGridView dataGridView2;
         private Label label6;
