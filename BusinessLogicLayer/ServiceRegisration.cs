@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using BusinessLogicLayer.Mappings;
+using BusinessLogicLayer.Services;
+using BusinessLogicLayer.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -21,5 +23,7 @@ public static class ServiceRegisration
             cfg.AddProfile(new StoreProfile());
             cfg.AddProfile(new ProductBatchProfile());
         }).CreateMapper());
+
+        services.AddTransient<IShopCommands, ShopCommands>();
     }
 }

@@ -1,4 +1,6 @@
 using BusinessLogicLayer;
+using BusinessLogicLayer.Services;
+using BusinessLogicLayer.Services.Interfaces;
 using DataAccessLayer;
 using DataAccessLayer.Contexts;
 using Microsoft.Extensions.Configuration;
@@ -21,25 +23,30 @@ namespace ShopService
                 .Build();
 
             // Создание и настройка сервисов
-            var serviceProvider = new ServiceCollection();
-            serviceProvider.AddBusinessLogicLayer();
-            serviceProvider.AddDataAccessLayer(configuration);
-            //serviceProvider.BuildServiceProvider();
+            var serviceCollection = new ServiceCollection();
+
+            // Добавление сервисов для бизнес-логики
+            serviceCollection.AddBusinessLogicLayer();
+
+            // Добавление сервисов для доступа к данным
+            serviceCollection.AddDataAccessLayer(configuration);
 
             try
             {
                 // Получение экземпляра ApplicationDbContext из сервис-провайдера
-                var dbContext = serviceProvider.BuildServiceProvider().GetRequiredService<ApplicationDbContext>();
+                var serviceProvider = serviceCollection.BuildServiceProvider();
+
+                var dbContext = serviceProvider.GetRequiredService<ApplicationDbContext>();
                 DataAccessLayer.Seed.DatabaseInitializer.SeedAsync(dbContext).Wait();
+
+                var shopCommands = serviceProvider.GetRequiredService<IShopCommands>();
+
+                ApplicationConfiguration.Initialize();
+                Application.Run(new Form1(shopCommands));
             } catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-            // To customize application configuration such as set high DPI settings or default font,
-            // see https://aka.ms/applicationconfiguration.
-            ApplicationConfiguration.Initialize();
-            Application.Run(new Form1());
         }
     }
 }
