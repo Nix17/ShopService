@@ -30,22 +30,23 @@
         {
             tabControl1 = new TabControl();
             tabPage1 = new TabPage();
-            button2 = new Button();
+            btnAddProviderProduct = new Button();
             label3 = new Label();
-            textBox4 = new TextBox();
+            txtBoxProviderProductName = new TextBox();
             label4 = new Label();
-            button1 = new Button();
-            textBox2 = new TextBox();
+            btnAddProviderStore = new Button();
+            txtBoxProviderStoreAddress = new TextBox();
             label2 = new Label();
-            textBox1 = new TextBox();
+            txtBoxProviderStoreName = new TextBox();
             label1 = new Label();
             button3 = new Button();
-            dataGridView1 = new DataGridView();
+            dtGridProviderProducts = new DataGridView();
+            ImportGoodId = new DataGridViewTextBoxColumn();
             ImportGoodName = new DataGridViewTextBoxColumn();
             ImportGoodPrice = new DataGridViewTextBoxColumn();
             ImportAmount = new DataGridViewTextBoxColumn();
             label5 = new Label();
-            comboBox1 = new ComboBox();
+            cmbBoxProviderStores = new ComboBox();
             tabPage2 = new TabPage();
             button6 = new Button();
             textBox5 = new TextBox();
@@ -63,7 +64,7 @@
             comboBox2 = new ComboBox();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dtGridProviderProducts).BeginInit();
             tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView2).BeginInit();
             SuspendLayout();
@@ -81,19 +82,19 @@
             // 
             // tabPage1
             // 
-            tabPage1.Controls.Add(button2);
+            tabPage1.Controls.Add(btnAddProviderProduct);
             tabPage1.Controls.Add(label3);
-            tabPage1.Controls.Add(textBox4);
+            tabPage1.Controls.Add(txtBoxProviderProductName);
             tabPage1.Controls.Add(label4);
-            tabPage1.Controls.Add(button1);
-            tabPage1.Controls.Add(textBox2);
+            tabPage1.Controls.Add(btnAddProviderStore);
+            tabPage1.Controls.Add(txtBoxProviderStoreAddress);
             tabPage1.Controls.Add(label2);
-            tabPage1.Controls.Add(textBox1);
+            tabPage1.Controls.Add(txtBoxProviderStoreName);
             tabPage1.Controls.Add(label1);
             tabPage1.Controls.Add(button3);
-            tabPage1.Controls.Add(dataGridView1);
+            tabPage1.Controls.Add(dtGridProviderProducts);
             tabPage1.Controls.Add(label5);
-            tabPage1.Controls.Add(comboBox1);
+            tabPage1.Controls.Add(cmbBoxProviderStores);
             tabPage1.Location = new Point(4, 29);
             tabPage1.Margin = new Padding(3, 4, 3, 4);
             tabPage1.Name = "tabPage1";
@@ -103,17 +104,18 @@
             tabPage1.Text = "Поставщик";
             tabPage1.UseVisualStyleBackColor = true;
             // 
-            // button2
+            // btnAddProviderProduct
             // 
-            button2.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            button2.Location = new Point(233, 131);
-            button2.Margin = new Padding(3, 4, 3, 4);
-            button2.Name = "button2";
-            button2.Size = new Size(86, 31);
-            button2.TabIndex = 16;
-            button2.Text = "Добавить";
-            button2.UseVisualStyleBackColor = true;
-            button2.UseWaitCursor = true;
+            btnAddProviderProduct.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            btnAddProviderProduct.Location = new Point(233, 131);
+            btnAddProviderProduct.Margin = new Padding(3, 4, 3, 4);
+            btnAddProviderProduct.Name = "btnAddProviderProduct";
+            btnAddProviderProduct.Size = new Size(86, 31);
+            btnAddProviderProduct.TabIndex = 16;
+            btnAddProviderProduct.Text = "Добавить";
+            btnAddProviderProduct.UseVisualStyleBackColor = true;
+            btnAddProviderProduct.UseWaitCursor = true;
+            btnAddProviderProduct.Click += btnAddProviderProduct_Click;
             // 
             // label3
             // 
@@ -125,15 +127,15 @@
             label3.TabIndex = 15;
             label3.UseWaitCursor = true;
             // 
-            // textBox4
+            // txtBoxProviderProductName
             // 
-            textBox4.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            textBox4.Location = new Point(31, 131);
-            textBox4.Margin = new Padding(3, 4, 3, 4);
-            textBox4.Name = "textBox4";
-            textBox4.Size = new Size(195, 27);
-            textBox4.TabIndex = 14;
-            textBox4.UseWaitCursor = true;
+            txtBoxProviderProductName.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            txtBoxProviderProductName.Location = new Point(31, 131);
+            txtBoxProviderProductName.Margin = new Padding(3, 4, 3, 4);
+            txtBoxProviderProductName.Name = "txtBoxProviderProductName";
+            txtBoxProviderProductName.Size = new Size(195, 27);
+            txtBoxProviderProductName.TabIndex = 14;
+            txtBoxProviderProductName.UseWaitCursor = true;
             // 
             // label4
             // 
@@ -146,27 +148,28 @@
             label4.Text = "Наименование товара";
             label4.UseWaitCursor = true;
             // 
-            // button1
+            // btnAddProviderStore
             // 
-            button1.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            button1.Location = new Point(531, 55);
-            button1.Margin = new Padding(3, 4, 3, 4);
-            button1.Name = "button1";
-            button1.Size = new Size(86, 31);
-            button1.TabIndex = 12;
-            button1.Text = "Добавить";
-            button1.UseVisualStyleBackColor = true;
-            button1.UseWaitCursor = true;
+            btnAddProviderStore.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            btnAddProviderStore.Location = new Point(531, 55);
+            btnAddProviderStore.Margin = new Padding(3, 4, 3, 4);
+            btnAddProviderStore.Name = "btnAddProviderStore";
+            btnAddProviderStore.Size = new Size(86, 31);
+            btnAddProviderStore.TabIndex = 12;
+            btnAddProviderStore.Text = "Добавить";
+            btnAddProviderStore.UseVisualStyleBackColor = true;
+            btnAddProviderStore.UseWaitCursor = true;
+            btnAddProviderStore.Click += btnAddProviderStore_Click;
             // 
-            // textBox2
+            // txtBoxProviderStoreAddress
             // 
-            textBox2.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            textBox2.Location = new Point(233, 55);
-            textBox2.Margin = new Padding(3, 4, 3, 4);
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(291, 27);
-            textBox2.TabIndex = 11;
-            textBox2.UseWaitCursor = true;
+            txtBoxProviderStoreAddress.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            txtBoxProviderStoreAddress.Location = new Point(233, 55);
+            txtBoxProviderStoreAddress.Margin = new Padding(3, 4, 3, 4);
+            txtBoxProviderStoreAddress.Name = "txtBoxProviderStoreAddress";
+            txtBoxProviderStoreAddress.Size = new Size(291, 27);
+            txtBoxProviderStoreAddress.TabIndex = 11;
+            txtBoxProviderStoreAddress.UseWaitCursor = true;
             // 
             // label2
             // 
@@ -179,15 +182,15 @@
             label2.Text = "Адрес магазина";
             label2.UseWaitCursor = true;
             // 
-            // textBox1
+            // txtBoxProviderStoreName
             // 
-            textBox1.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            textBox1.Location = new Point(31, 56);
-            textBox1.Margin = new Padding(3, 4, 3, 4);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(195, 27);
-            textBox1.TabIndex = 9;
-            textBox1.UseWaitCursor = true;
+            txtBoxProviderStoreName.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            txtBoxProviderStoreName.Location = new Point(31, 56);
+            txtBoxProviderStoreName.Margin = new Padding(3, 4, 3, 4);
+            txtBoxProviderStoreName.Name = "txtBoxProviderStoreName";
+            txtBoxProviderStoreName.Size = new Size(195, 27);
+            txtBoxProviderStoreName.TabIndex = 9;
+            txtBoxProviderStoreName.UseWaitCursor = true;
             // 
             // label1
             // 
@@ -210,17 +213,26 @@
             button3.Text = "Завезти";
             button3.UseVisualStyleBackColor = true;
             // 
-            // dataGridView1
+            // dtGridProviderProducts
             // 
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { ImportGoodName, ImportGoodPrice, ImportAmount });
-            dataGridView1.Location = new Point(31, 260);
-            dataGridView1.Margin = new Padding(3, 4, 3, 4);
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.RowHeadersWidth = 51;
-            dataGridView1.RowTemplate.Height = 25;
-            dataGridView1.Size = new Size(392, 200);
-            dataGridView1.TabIndex = 6;
+            dtGridProviderProducts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dtGridProviderProducts.Columns.AddRange(new DataGridViewColumn[] { ImportGoodId, ImportGoodName, ImportGoodPrice, ImportAmount });
+            dtGridProviderProducts.Location = new Point(31, 260);
+            dtGridProviderProducts.Margin = new Padding(3, 4, 3, 4);
+            dtGridProviderProducts.Name = "dtGridProviderProducts";
+            dtGridProviderProducts.RowHeadersWidth = 51;
+            dtGridProviderProducts.RowTemplate.Height = 25;
+            dtGridProviderProducts.Size = new Size(392, 200);
+            dtGridProviderProducts.TabIndex = 6;
+            // 
+            // ImportGoodId
+            // 
+            ImportGoodId.HeaderText = "Id";
+            ImportGoodId.MinimumWidth = 6;
+            ImportGoodId.Name = "ImportGoodId";
+            ImportGoodId.ReadOnly = true;
+            ImportGoodId.Visible = false;
+            ImportGoodId.Width = 125;
             // 
             // ImportGoodName
             // 
@@ -253,14 +265,15 @@
             label5.TabIndex = 5;
             label5.Text = "Магазин";
             // 
-            // comboBox1
+            // cmbBoxProviderStores
             // 
-            comboBox1.FormattingEnabled = true;
-            comboBox1.Location = new Point(99, 207);
-            comboBox1.Margin = new Padding(3, 4, 3, 4);
-            comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(230, 28);
-            comboBox1.TabIndex = 4;
+            cmbBoxProviderStores.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbBoxProviderStores.FormattingEnabled = true;
+            cmbBoxProviderStores.Location = new Point(99, 207);
+            cmbBoxProviderStores.Margin = new Padding(3, 4, 3, 4);
+            cmbBoxProviderStores.Name = "cmbBoxProviderStores";
+            cmbBoxProviderStores.Size = new Size(230, 28);
+            cmbBoxProviderStores.TabIndex = 4;
             // 
             // tabPage2
             // 
@@ -421,12 +434,13 @@
             Controls.Add(tabControl1);
             Margin = new Padding(3, 4, 3, 4);
             Name = "Form1";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Form1";
             Load += Form1_Load;
             tabControl1.ResumeLayout(false);
             tabPage1.ResumeLayout(false);
             tabPage1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dtGridProviderProducts).EndInit();
             tabPage2.ResumeLayout(false);
             tabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView2).EndInit();
@@ -438,9 +452,9 @@
         private TabControl tabControl1;
         private TabPage tabPage1;
         private Label label5;
-        private ComboBox comboBox1;
+        private ComboBox cmbBoxProviderStores;
         private TabPage tabPage2;
-        private DataGridView dataGridView1;
+        private DataGridView dtGridProviderProducts;
         private Button button3;
         private Button button4;
         private DataGridView dataGridView2;
@@ -456,15 +470,16 @@
         private DataGridViewTextBoxColumn ExportGoodPrice;
         private DataGridViewTextBoxColumn ExportAmount;
         private DataGridViewTextBoxColumn Total;
-        private Button button2;
+        private Button btnAddProviderProduct;
         private Label label3;
-        private TextBox textBox4;
+        private TextBox txtBoxProviderProductName;
         private Label label4;
-        private Button button1;
-        private TextBox textBox2;
+        private Button btnAddProviderStore;
+        private TextBox txtBoxProviderStoreAddress;
         private Label label2;
-        private TextBox textBox1;
+        private TextBox txtBoxProviderStoreName;
         private Label label1;
+        private DataGridViewTextBoxColumn ImportGoodId;
         private DataGridViewTextBoxColumn ImportGoodName;
         private DataGridViewTextBoxColumn ImportGoodPrice;
         private DataGridViewTextBoxColumn ImportAmount;
