@@ -36,6 +36,5 @@ public interface IShopCommands
     Task<ServiceActionResult<string>> DeleteProductBatch(Guid id);
     Task<ServiceActionResult<ProductBatchDTO>> GetProductBatch(Guid id);
     Task<ServiceActionResult<List<ProductBatchDTO>>> GetAllProductBatches();
-    Task<ServiceActionResult<List<ProductBatchDTO>>> SearchProductBatches(string search);
     #endregion
 }
