@@ -23,23 +23,7 @@ public class ApplicationDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        // Чтение значения из конфигурационного файла
-        var configuration = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json")
-            .Build();
-
-        bool useSqlite = configuration.GetValue<bool>("StorageSettings:UseSqlite");
-
-        // Выбор базы данных в зависимости от значения
-        if (useSqlite)
-        {
-            optionsBuilder.UseSqlite("Data Source=shop-service-app.db");
-        }
-        else
-        {
-            optionsBuilder.UseInMemoryDatabase("ShopServiceDatabase");
-        }
+        base.OnConfiguring(optionsBuilder);
     }
 
     protected override void OnModelCreating(ModelBuilder builder)

@@ -1,4 +1,7 @@
+using BusinessLogicLayer;
+using DataAccessLayer;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ShopService
 {
@@ -8,15 +11,18 @@ namespace ShopService
         ///  The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        public static void Main()
         {
-            //var cfg = new ConfigurationBuilder()
-            //    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-            //    .AddEnvironmentVariables()
-            //    .Build();
+            var configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddEnvironmentVariables()
+                .Build();
 
-            //// Если TRUE, то данные в SQLite, иначе InMemoryStream и CSV
-            //bool? isSqlite = cfg.GetValue<bool>("StorageSettings:UseSqlite");
+            // Создание и настройка сервисов
+            var serviceProvider = new ServiceCollection();
+            serviceProvider.AddBusinessLogicLayer();
+            serviceProvider.AddDataAccessLayer(configuration);
+
 
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
