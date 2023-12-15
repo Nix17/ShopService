@@ -1,4 +1,5 @@
 using BusinessLogicLayer.DTO.Product;
+using BusinessLogicLayer.DTO.Store;
 using BusinessLogicLayer.Services.Interfaces;
 
 namespace ShopService
@@ -18,6 +19,10 @@ namespace ShopService
 
         private async void Form1_Load(object sender, EventArgs e)
         {
+            var res11 = await _cmds.GetAllStores();
+
+            var res12 = await _cmds.GetAllProductBatches();
+
             var res = await _cmds.GetAllProducts();
             if (res.IsSuccess)
             {

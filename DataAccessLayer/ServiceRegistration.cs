@@ -10,6 +10,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using DataAccessLayer.Helpers;
+using DataAccessLayer.Entities;
 
 namespace DataAccessLayer;
 
@@ -32,6 +34,22 @@ public static class ServiceRegistration
         else
         {
             services.AddDbContext<ApplicationDbContext>(opts => opts.UseInMemoryDatabase("ShopServiceDatabase"));
+            
+            CsvReadWriteHelper.ReadCsvFile<string>("");
+
+
+            // Получаем текущую директорию
+            string currentDirectory = Directory.GetCurrentDirectory();
+            string storesCsvPath = Path.Combine(currentDirectory, "Data\\stores.csv");
+            string productsCsvPath = Path.Combine(currentDirectory, "Data\\products.csv");
+
+            // Получаем контекст
+            var serviceProvider = services.BuildServiceProvider();
+            var dbContext = serviceProvider.GetRequiredService<ApplicationDbContext>();
+            // Читаем данные из CSV
+            var stores = CsvReadWriteHelper.ReadCsvFile<StoresCsvModel>(storesCsvPath);
+            var products = CsvReadWriteHelper.ReadCsvFile<ProductsCsvModel>(productsCsvPath);
+            ImportDataHelper.ImportToDbInMemory(dbContext, stores, products).Wait();
         }
 
         services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));

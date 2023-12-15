@@ -43,7 +43,7 @@ public class ShopCommands : IShopCommands
         }
     }
 
-    public async Task<ServiceActionResult<string>> UpdateProduct(Guid id, ProductForm form)
+    public async Task<ServiceActionResult<string>> UpdateProduct(int id, ProductForm form)
     {
         try
         {
@@ -63,7 +63,7 @@ public class ShopCommands : IShopCommands
         }
     }
 
-    public async Task<ServiceActionResult<string>> DeleteProduct(Guid id)
+    public async Task<ServiceActionResult<string>> DeleteProduct(int id)
     {
         try
         {
@@ -79,11 +79,11 @@ public class ShopCommands : IShopCommands
         }
     }
 
-    public async Task<ServiceActionResult<ProductDTO>> GetProduct(Guid id)
+    public async Task<ServiceActionResult<ProductDTO>> GetProduct(int id)
     {
         try
         {
-            var item = await _uow.ProductRepo.GetByIdAsync(id);
+            var item = await _uow.ProductRepo.GetByIntIdAsync(id);
             if (item == null) throw new Exception("Not found");
 
             var res = _mapper.Map<ProductDTO>(item);
@@ -137,7 +137,7 @@ public class ShopCommands : IShopCommands
         }
     }
     
-    public async Task<ServiceActionResult<string>> UpdateStore(Guid id, StoreForm form)
+    public async Task<ServiceActionResult<string>> UpdateStore(int id, StoreForm form)
     {
         try
         {
@@ -155,7 +155,7 @@ public class ShopCommands : IShopCommands
         }
     }
 
-    public async Task<ServiceActionResult<string>> DeleteStore(Guid id)
+    public async Task<ServiceActionResult<string>> DeleteStore(int id)
     {
         try
         {
@@ -172,11 +172,11 @@ public class ShopCommands : IShopCommands
         }
     }
 
-    public async Task<ServiceActionResult<StoreDTO>> GetStore(Guid id)
+    public async Task<ServiceActionResult<StoreDTO>> GetStore(int id)
     {
         try
         {
-            var item = await _uow.StoreRepo.GetByIdAsync(id);
+            var item = await _uow.StoreRepo.GetByIntIdAsync(id);
             if (item == null) throw new Exception("Not found");
 
             var res = _mapper.Map<StoreDTO>(item);
@@ -233,7 +233,7 @@ public class ShopCommands : IShopCommands
         }
     }
 
-    public async Task<ServiceActionResult<string>> UpdateProductBatch(Guid id, ProductBatchForm form)
+    public async Task<ServiceActionResult<string>> UpdateProductBatch(int id, ProductBatchForm form)
     {
         try
         {
@@ -251,7 +251,7 @@ public class ShopCommands : IShopCommands
         }
     }
 
-    public async Task<ServiceActionResult<string>> DeleteProductBatch(Guid id)
+    public async Task<ServiceActionResult<string>> DeleteProductBatch(int id)
     {
         try
         {
@@ -268,11 +268,11 @@ public class ShopCommands : IShopCommands
         }
     }
 
-    public async Task<ServiceActionResult<ProductBatchDTO>> GetProductBatch(Guid id)
+    public async Task<ServiceActionResult<ProductBatchDTO>> GetProductBatch(int id)
     {
         try
         {
-            var item = await _uow.ProductBatchRepo.GetByIdAsync(id);
+            var item = await _uow.ProductBatchRepo.GetByIntIdAsync(id);
             if (item == null) throw new Exception("Not found");
 
             var res = _mapper.Map<ProductBatchDTO>(item);
@@ -290,6 +290,17 @@ public class ShopCommands : IShopCommands
         try
         {
             var list = await _uow.ProductBatchRepo.GetAllAsync();
+
+            foreach(var item in list)
+            {
+                var ps = await _uow.ProductRepo.GetAllAsync();
+                var ss = await _uow.StoreRepo.GetAllAsync();
+                var product = ps.FirstOrDefault(o => o.Id == item.ProductId);
+                var store = ss.FirstOrDefault(o => o.Id == item.StoreId);
+                item.Product = product;
+                item.Store = store;
+            }
+
             var res = _mapper.Map<List<ProductBatchDTO>>(list);
             return new ServiceActionResult<List<ProductBatchDTO>>(true, "OK", res);
         }

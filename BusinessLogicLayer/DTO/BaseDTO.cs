@@ -8,5 +8,5 @@ namespace BusinessLogicLayer.DTO;
 
 public class BaseDTO
 {
-    public Guid Id { get; set; }
+    public int Id { get; set; }
 }

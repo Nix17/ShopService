@@ -15,6 +15,9 @@ public class ProductBatchProfile : Profile
     {
         CreateMap<ProductBatchEntity, ProductBatchDTO>();
 
-        CreateMap<ProductBatchForm, ProductBatchEntity>();
+        CreateMap<ProductBatchForm, ProductBatchEntity>()
+            //.ForMember(dest => dest.)
+            .AfterMap((f, e) => e.Price = Math.Round(f.Price, 2));
+            ;
     }
 }

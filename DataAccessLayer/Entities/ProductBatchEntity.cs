@@ -8,12 +8,24 @@ namespace DataAccessLayer.Entities;
 
 public class ProductBatchEntity : BaseEntity
 {
+    public ProductBatchEntity()
+    {
+    }
+
+    public ProductBatchEntity(int storeId, int productId, int quantity, decimal price)
+    {
+        StoreId = storeId;
+        ProductId = productId;
+        Quantity = quantity;
+        Price = price;
+    }
+
     // Связь с магазином
-    public Guid StoreId { get; set; }
+    public int StoreId { get; set; }
     public StoreEntity Store {  get; set; }
 
     // Связь с товаром
-    public Guid ProductId { get; set; } // Связь с товаром
+    public int ProductId { get; set; } // Связь с товаром
     public ProductEntity Product { get; set; }
     
     public int Quantity { get; set; }
