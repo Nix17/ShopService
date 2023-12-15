@@ -24,7 +24,8 @@ public static class ServiceRegistration
         {
             services.AddDbContext<ApplicationDbContext>(opts =>
             {
-                string connectionString = configuration.GetConnectionString("StorageSettings:SqliteConnection");
+                string connectionString = configuration.GetConnectionString("SqliteConnection");
+                if (string.IsNullOrEmpty(connectionString)) connectionString = "shop-service-app.db";
                 opts.UseSqlite(connectionString);
             });
         }
