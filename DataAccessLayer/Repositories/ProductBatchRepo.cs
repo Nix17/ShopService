@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Repositories;
 
-public class ProductRepo : GenericRepository<ProductEntity>, IProductRepo
+public class ProductBatchRepo : GenericRepository<ProductBatchEntity>, IProductBatchRepo
 {
-    public ProductRepo(ApplicationDbContext dbContext) : base(dbContext)
+    public ProductBatchRepo(ApplicationDbContext dbContext) : base(dbContext)
     {
     }
 }

@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Repositories;
 
-public class ProductRepo : GenericRepository<ProductEntity>, IProductRepo
+public class StoreRepo : GenericRepository<StoreEntity>, IStoreRepo
 {
-    public ProductRepo(ApplicationDbContext dbContext) : base(dbContext)
+    public StoreRepo(ApplicationDbContext dbContext) : base(dbContext)
     {
     }
 }

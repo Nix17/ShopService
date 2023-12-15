@@ -10,13 +10,13 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Contexts;
 
-public class ApplicationContext : DbContext
+public class ApplicationDbContext : DbContext
 {
     public DbSet<ProductEntity> Products { get; set; }
     public DbSet<StoreEntity> Stores { get; set; }
     public DbSet<ProductBatchEntity> ProductBatches { get; set; }
 
-    public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
         Database.EnsureCreated();
     }

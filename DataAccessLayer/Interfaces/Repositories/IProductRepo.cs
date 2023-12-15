@@ -5,8 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BusinessLogicLayer.Interfaces.Repositories;
+namespace DataAccessLayer.Interfaces.Repositories;
 
-public interface IStoreRepo : IGenericRepository<StoreEntity>
+public interface IProductRepo : IGenericRepository<ProductEntity>
 {
 }
