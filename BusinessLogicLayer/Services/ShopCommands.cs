@@ -282,6 +282,40 @@ public class ShopCommands : IShopCommands
         }
     }
 
+    /// <summary>
+    /// Key => id, Value => Quantity
+    /// </summary>
+    /// <param name="dict"></param>
+    /// <returns></returns>
+    public async Task<ServiceActionResult<string>> ReduceQuantityProductBatch(Dictionary<int, int> dict)
+    {
+        try
+        {
+            var list = await _uow.ProductBatchRepo.FindAllAsync(o => dict.Keys.Contains(o.Id));
+            if (list.Count == 0) return new ServiceActionResult<string>(true, "OK");
+            if (list.Count != dict.Count) throw new Exception("Not found");
+
+            while(dict.Count > 0)
+            {
+                var dictItem = dict.First();
+                foreach(var item in list)
+                {
+                    var obj = await _uow.ProductBatchRepo.GetByIntIdAsync(item.Id);
+                    obj.Quantity = obj.Quantity - dictItem.Value;
+                    await _uow.SaveChangesAsync();
+                }
+
+                dict.Remove(dictItem.Key);
+            }
+
+            return new ServiceActionResult<string>(true, "OK");
+
+        } catch (Exception ex)
+        {
+            return new ServiceActionResult<string>(ex);
+        }
+    }
+
     public async Task<ServiceActionResult<string>> DeleteProductBatch(int id)
     {
         try
@@ -320,7 +354,7 @@ public class ShopCommands : IShopCommands
     {
         try
         {
-            var list = await _uow.ProductBatchRepo.GetAllAsync();
+            var list = await _uow.ProductBatchRepo.FindAllAsync(o => o.Quantity > 0);
 
             foreach(var item in list)
             {

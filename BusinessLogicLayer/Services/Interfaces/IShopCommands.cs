@@ -34,6 +34,7 @@ public interface IShopCommands
     Task<ServiceActionResult<string>> AddProductBatch(ProductBatchForm form);
     Task<ServiceActionResult<string>> AddListProductBatch(List<ProductBatchForm> data);
     Task<ServiceActionResult<string>> UpdateProductBatch(int id, ProductBatchForm form);
+    Task<ServiceActionResult<string>> ReduceQuantityProductBatch(Dictionary<int, int> dict);
     Task<ServiceActionResult<string>> DeleteProductBatch(int id);
     Task<ServiceActionResult<ProductBatchDTO>> GetProductBatch(int id);
     Task<ServiceActionResult<List<ProductBatchDTO>>> GetAllProductBatches();

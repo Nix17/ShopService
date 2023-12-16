@@ -368,6 +368,7 @@
             btnBuy.Text = "Купить";
             btnBuy.UseVisualStyleBackColor = true;
             btnBuy.UseWaitCursor = true;
+            btnBuy.Click += btnBuy_Click;
             // 
             // dtGridBuyerBatches
             // 

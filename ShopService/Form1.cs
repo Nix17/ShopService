@@ -289,7 +289,7 @@ namespace ShopService
             var dictStores = new Dictionary<int, decimal>();
 
             var storeIds = Stores.Select(x => x.Id);
-            foreach(var storeId in storeIds)
+            foreach (var storeId in storeIds)
             {
                 var listProducts = ProductBatches.Where(o => o.Store.Id == storeId).ToList();
 
@@ -297,7 +297,7 @@ namespace ShopService
                 if (isPotentially.Count == dictProducts.Keys.Count)
                 {
                     decimal totalCost = 0;
-                    while(isPotentially.Count > 0)
+                    while (isPotentially.Count > 0)
                     {
                         bool isCanAdd = true;
                         var item = isPotentially.First();
@@ -310,7 +310,7 @@ namespace ShopService
                         totalCost = totalCost + (item.Price * dictItem.Value);
                         isPotentially.RemoveAt(0);
                     }
-                    
+
                     if (totalCost > 0) dictStores.Add(storeId, totalCost);
                 }
             }
@@ -341,10 +341,10 @@ namespace ShopService
                 }
             }
 
-            foreach(var item in dictProducts)
+            foreach (var item in dictProducts)
             {
                 var batch = ProductBatches.Find(o => o.Store.Id == findedId && o.Product.Id == item.Key);
-                for(int idx = 0; idx < dtGridBuyerBatches.Rows.Count; idx++)
+                for (int idx = 0; idx < dtGridBuyerBatches.Rows.Count; idx++)
                 {
                     var dtIdCol = Convert.ToInt32(dtGridBuyerBatches.Rows[idx].Cells[0].Value);
                     if (dtIdCol == batch.Id)
@@ -355,6 +355,43 @@ namespace ShopService
                 }
             }
 
+        }
+
+        private async void btnBuy_Click(object sender, EventArgs e)
+        {
+            // key - ключ ProductBatch, value - количество товара
+            var dict = new Dictionary<int, int>();
+
+            for (int i = 0; i < dtGridBuyerBatches.Rows.Count; i++)
+            {
+                if (dtGridBuyerBatches.Rows[i].Cells[3].Value == null) continue;
+                if (dtGridBuyerBatches.Rows[i].Cells[3].Value.ToString() == "") continue;
+
+                int batchId = Convert.ToInt32(dtGridBuyerBatches.Rows[i].Cells[0].Value);
+                int count = Convert.ToInt32(dtGridBuyerBatches.Rows[i].Cells[3].Value);
+
+                dict.Add(batchId, count);
+            }
+
+            foreach(var item in dict)
+            {
+                var batchItem = ProductBatches.Find(o => o.Id == item.Key);
+                if (batchItem.Quantity < item.Value)
+                {
+                    MessageBox.Show("Не хватает товаров на складе!");
+                    return;
+                }
+            }
+
+            var res = await _cmds.ReduceQuantityProductBatch(dict);
+            if (res.IsSuccess)
+            {
+                UpdateAllData();
+            }
+            else
+            {
+                MessageBox.Show(res.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }
