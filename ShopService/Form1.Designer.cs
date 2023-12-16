@@ -337,6 +337,7 @@
             btnSearchCost.TabIndex = 14;
             btnSearchCost.Text = "Поиск";
             btnSearchCost.UseVisualStyleBackColor = true;
+            btnSearchCost.Click += btnSearchCost_Click;
             // 
             // textBoxAllCost
             // 

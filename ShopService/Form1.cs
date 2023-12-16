@@ -373,7 +373,7 @@ namespace ShopService
                 dict.Add(batchId, count);
             }
 
-            foreach(var item in dict)
+            foreach (var item in dict)
             {
                 var batchItem = ProductBatches.Find(o => o.Id == item.Key);
                 if (batchItem.Quantity < item.Value)
@@ -391,6 +391,29 @@ namespace ShopService
             else
             {
                 MessageBox.Show(res.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnSearchCost_Click(object sender, EventArgs e)
+        {
+            var store = (cmbBoxBuyerStores.SelectedItem as StoreDTO);
+            if (store.Name == ENUM_NAMES.EMPTY_STORE_NAME) return;
+
+            if (textBoxSearchCost.Text == "") return;
+
+            int searchCost = Convert.ToInt32(textBoxSearchCost.Text);
+
+            for(int i = 0; i < dtGridBuyerBatches.Rows.Count; i++)
+            {
+                if (dtGridBuyerBatches.Rows[i].Cells[2].Value == null) return;
+                if (dtGridBuyerBatches.Rows[i].Cells[2].Value.ToString() == "") return;
+
+                int price = Convert.ToInt32(dtGridBuyerBatches.Rows[i].Cells[2].Value);
+                int count = searchCost / price;
+                decimal cost = price * count;
+
+                dtGridBuyerBatches.Rows[i].Cells[3].Value = count;
+                dtGridBuyerBatches.Rows[i].Cells[4].Value = cost;
             }
         }
     }
