@@ -58,9 +58,15 @@ namespace ShopService
 
         private async Task FillDataGridProviderProducts()
         {
+            var selStoreId = (cmbBoxProviderStores.SelectedItem as StoreDTO).Id;
+
+            var productIds = ProductBatches.Where(o => o.Store.Id == selStoreId).Select(o => o.Product.Id).ToList();
+
+            var notAddedProducts = Products.FindAll(o => !productIds.Contains(o.Id));
+
             dtGridProviderProducts.Rows.Clear();
             int idxRow = 0;
-            foreach (ProductDTO product in Products)
+            foreach (ProductDTO product in notAddedProducts)
             {
                 dtGridProviderProducts.Rows.Add();
                 dtGridProviderProducts.Rows[idxRow].Cells[0].Value = product.Id;
@@ -232,9 +238,9 @@ namespace ShopService
 
 
         // TODO
-        private void cmbBoxProviderStores_SelectedIndexChanged(object sender, EventArgs e)
+        private async void cmbBoxProviderStores_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            await FillDataGridProviderProducts();
         }
 
         private void dtGridBuyerBatches_CellValueChanged(object sender, DataGridViewCellEventArgs e)
