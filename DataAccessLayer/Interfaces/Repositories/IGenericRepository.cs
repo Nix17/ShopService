@@ -35,4 +35,6 @@ public interface IGenericRepository<T> where T : class
     Task<bool> ExistsAsync(Guid id);
     Task<bool> ExistsAsync(int id);
     Task<bool> AnyAsync(Expression<Func<T, bool>> match);
+
+    void Detach(T entity);
 }

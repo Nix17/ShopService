@@ -14,6 +14,8 @@ public class StoreConfiguration : IEntityTypeConfiguration<StoreEntity>
     public void Configure(EntityTypeBuilder<StoreEntity> builder)
     {
         builder.ToTable("stores").HasKey(m => m.Id);
+        // Добавляем автоинкрементное свойство Id
+        builder.Property(m => m.Id).ValueGeneratedOnAdd();
         builder.Property(m => m.Name).IsRequired().HasMaxLength(256);
         builder.Property(m => m.Address).HasDefaultValue("").HasMaxLength(500);
     }

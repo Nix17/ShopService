@@ -37,6 +37,7 @@ public class ShopCommands : IShopCommands
             if (isExist != null) throw new Exception("A product with this name already exists!");
 
             var obj = _mapper.Map<ProductEntity>(form);
+            _uow.ProductRepo.Detach(obj);
             var res = await _uow.ProductRepo.AddAsync(obj);
             
             // WRITE CSV
@@ -145,7 +146,13 @@ public class ShopCommands : IShopCommands
     {
         try
         {
-            var obj = _mapper.Map<StoreEntity>(form);
+            //var obj = _mapper.Map<StoreEntity>(form);
+
+
+            var obj = new StoreEntity(form.Name, form.Address);
+            _uow.StoreRepo.Detach(obj);
+
+
             var res = await _uow.StoreRepo.AddAsync(obj);
 
             // WRITE CSV
@@ -271,12 +278,14 @@ public class ShopCommands : IShopCommands
             }
 
             var obj = _mapper.Map<ProductBatchEntity>(form);
+            _uow.ProductBatchRepo.Detach(obj);
             var res = await _uow.ProductBatchRepo.AddAsync(obj);
+            _uow.ProductBatchRepo.Detach(obj);
 
             // WRITE CSV
-            var csvDataStores = await getStores();
-            var csvDataBatches = await getAllBatches();
-            await _csv.WriteCsv(csvDataStores, csvDataBatches);
+            //var csvDataStores = await getStores();
+            //var csvDataBatches = await getAllBatches();
+            //await _csv.WriteCsv(csvDataStores, csvDataBatches);
 
             return new ServiceActionResult<string>(true, res.Id.ToString());
         }
@@ -300,12 +309,14 @@ public class ShopCommands : IShopCommands
                     if (isExisted.Quantity == 0)
                     {
                         var obj = _mapper.Map<ProductBatchEntity>(item);
+                        _uow.ProductBatchRepo.Detach(obj);
                         await _uow.ProductBatchRepo.AddAsync(obj);
                     }
                 }
                 else
                 {
                     var obj = _mapper.Map<ProductBatchEntity>(item);
+                    _uow.ProductBatchRepo.Detach(obj);
                     await _uow.ProductBatchRepo.AddAsync(obj);
                 }
             }
@@ -369,6 +380,7 @@ public class ShopCommands : IShopCommands
                     var obj = await _uow.ProductBatchRepo.GetByIntIdAsync(item.Id);
                     obj.Quantity = obj.Quantity - dictItem.Value;
                     await _uow.SaveChangesAsync();
+                    _uow.ProductBatchRepo.Detach(obj);
                 }
 
                 dict.Remove(dictItem.Key);

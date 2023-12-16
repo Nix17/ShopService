@@ -192,14 +192,17 @@ namespace ShopService
         {
             var listForm = MakeDelivery();
 
-            var res = await _cmds.AddListProductBatch(listForm);
-            if (res.IsSuccess)
+            foreach(var obj in listForm)
             {
-                UpdateAllData();
-            }
-            else
-            {
-                MessageBox.Show($"{res.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                var res = await _cmds.AddProductBatch(obj);
+                if (res.IsSuccess)
+                {
+                    UpdateAllData();
+                }
+                else
+                {
+                    MessageBox.Show($"{res.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 

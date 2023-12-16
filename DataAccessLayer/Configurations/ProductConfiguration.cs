@@ -14,6 +14,8 @@ public class ProductConfiguration : IEntityTypeConfiguration<ProductEntity>
     public void Configure(EntityTypeBuilder<ProductEntity> builder)
     {
         builder.ToTable("products").HasKey(m => m.Id);
+        // Добавляем автоинкрементное свойство Id
+        builder.Property(m => m.Id).ValueGeneratedOnAdd();
         builder.ToTable("products").HasIndex(m => m.Name).IsUnique();
         builder.Property(m => m.Name).IsRequired().HasMaxLength(200);
     }

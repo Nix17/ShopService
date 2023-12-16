@@ -60,15 +60,20 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
 
     public virtual async Task<T> AddAsync(T entity)
     {
+        Detach(entity); // Отсоединяем, если уже отслеживается
+
         await _context.Set<T>().AddAsync(entity);
         await _context.SaveChangesAsync();
+        Detach(entity); // Отсоединяем, если уже отслеживается
         return entity;
     }
 
     public virtual async Task UpdateAsync(T entity)
     {
+        Detach(entity); // Отсоединяем, если уже отслеживается
         _context.Entry(entity).State = EntityState.Modified;
         await _context.SaveChangesAsync();
+        Detach(entity); // Отсоединяем, если уже отслеживается
     }
     public virtual async Task<T> UpdateAsync(T t, long id)
     {
@@ -77,17 +82,21 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
         T exist = await _context.Set<T>().FindAsync(id);
         if (exist != null)
         {
+            Detach(exist); // Отсоединяем, если уже отслеживается
             _context.Entry(exist).CurrentValues.SetValues(t);
             _context.Entry(exist).State = EntityState.Modified;
         }
         await _context.SaveChangesAsync();
+        Detach(exist); // Отсоединяем, если уже отслеживается
         return exist;
     }
 
     public virtual async Task DeleteAsync(T entity)
     {
+        Detach(entity); // Отсоединяем, если уже отслеживается
         _context.Set<T>().Remove(entity);
         await _context.SaveChangesAsync();
+        Detach(entity); // Отсоединяем, если уже отслеживается
     }
 
     public virtual async Task<IReadOnlyList<T>> GetAllAsync()
@@ -111,15 +120,14 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
             queryable = queryable.Include<T, object>(includeProperty);
         }
 
-        if (noTrack) await queryable.AsNoTracking().ToListAsync();
+        await queryable.AsNoTracking().ToListAsync();
         return await queryable.ToListAsync();
     }
 
     public virtual async Task<ICollection<T>> FindAllAsync(Expression<Func<T, bool>> match, bool noTrack = false)
     {
-        if (noTrack) return await _context.Set<T>().Where(match).AsNoTracking().ToListAsync();
+        return await _context.Set<T>().Where(match).AsNoTracking().ToListAsync();
 
-        return await _context.Set<T>().Where(match).ToListAsync();
     }
 
     public virtual async Task<T> FindIncludingAsync(Expression<Func<T, bool>> match, bool noTrack = false, params Expression<Func<T, object>>[] include)
@@ -129,9 +137,8 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
         {
             queryable = queryable.Include<T, object>(includeProperty);
         }
+        return await queryable.AsNoTracking().FirstOrDefaultAsync(match);
 
-        if (noTrack) return await queryable.AsNoTracking().FirstOrDefaultAsync(match);
-        return await queryable.FirstOrDefaultAsync(match);
     }
 
     public virtual async Task<ICollection<T>> FindAllIncludingAsync(Expression<Func<T, bool>> match, bool noTrack = false, params Expression<Func<T, object>>[] include)
@@ -142,14 +149,13 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
             queryable = queryable.Include<T, object>(includeProperty);
         }
 
-        if (noTrack) return await queryable.Where(match).AsNoTracking().ToListAsync();
-        return await queryable.Where(match).ToListAsync();
+        return await queryable.Where(match).AsNoTracking().ToListAsync();
     }
 
     public virtual async Task<T> FindAsync(Expression<Func<T, bool>> match, bool noTrack = false)
     {
-        if (noTrack) return await _context.Set<T>().AsNoTracking().FirstOrDefaultAsync(match);
-        return await _context.Set<T>().FirstOrDefaultAsync(match);
+        return await _context.Set<T>().AsNoTracking().FirstOrDefaultAsync(match);
+
     }
 
     public virtual async Task<ICollection<T>> AddRangeAsync(ICollection<T> t)
@@ -178,5 +184,10 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     public virtual async Task<bool> AnyAsync(Expression<Func<T, bool>> match)
     {
         return await _context.Set<T>().Where(match).AsNoTracking().AnyAsync();
+    }
+
+    public virtual void Detach(T entity)
+    {
+        _context.Entry(entity).State = EntityState.Detached;
     }
 }

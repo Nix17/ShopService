@@ -14,6 +14,8 @@ public class ProductBatchConfiguration : IEntityTypeConfiguration<ProductBatchEn
     public void Configure(EntityTypeBuilder<ProductBatchEntity> builder)
     {
         builder.ToTable("product_batches").HasKey(m => m.Id);
+        // Добавляем автоинкрементное свойство Id
+        builder.Property(m => m.Id).ValueGeneratedOnAdd();
         builder.ToTable("product_batches").HasIndex(m => m.ProductId);
         builder.ToTable("product_batches").HasIndex(m => m.StoreId);
         builder.Property(m => m.Quantity).HasDefaultValue(1).IsRequired();

@@ -28,5 +28,18 @@ public static class DatabaseInitializer
             await db.SaveChangesAsync();
         }
         #endregion
+
+        if (await db.Stores.CountAsync() == 0)
+        {
+            var list = new List<StoreEntity>();
+            var obj1 = new StoreEntity("Magaz1");
+            list.Add(obj1);
+
+            var obj2 = new StoreEntity("Magaz2");
+            list.Add(obj2);
+
+            await db.Stores.AddRangeAsync(list);
+            await db.SaveChangesAsync();
+        }
     }
 }
