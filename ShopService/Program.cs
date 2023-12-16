@@ -26,7 +26,7 @@ namespace ShopService
             var serviceCollection = new ServiceCollection();
 
             // ƒобавление сервисов дл€ бизнес-логики
-            serviceCollection.AddBusinessLogicLayer();
+            serviceCollection.AddBusinessLogicLayer(configuration);
 
             // ƒобавление сервисов дл€ доступа к данным
             serviceCollection.AddDataAccessLayer(configuration);

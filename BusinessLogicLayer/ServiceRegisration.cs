@@ -2,6 +2,7 @@
 using BusinessLogicLayer.Mappings;
 using BusinessLogicLayer.Services;
 using BusinessLogicLayer.Services.Interfaces;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace BusinessLogicLayer;
 
 public static class ServiceRegisration
 {
-    public static void AddBusinessLogicLayer(this IServiceCollection services)
+    public static void AddBusinessLogicLayer(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
         services.AddSingleton(provider => new MapperConfiguration(cfg =>
@@ -23,6 +24,12 @@ public static class ServiceRegisration
             cfg.AddProfile(new StoreProfile());
             cfg.AddProfile(new ProductBatchProfile());
         }).CreateMapper());
+
+        // Если TRUE, то данные в SQLite, иначе InMemoryStream и CSV
+        bool isSqlite = configuration.GetValue<bool>("StorageSettings:UseSqlite");
+
+        if (isSqlite) services.AddTransient<ICsvWriterService, CsvWriterEmptyService>();
+        else services.AddTransient<ICsvWriterService, CsvWriterService>();
 
         services.AddTransient<IShopCommands, ShopCommands>();
     }

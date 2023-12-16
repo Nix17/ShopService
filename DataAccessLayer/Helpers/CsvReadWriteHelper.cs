@@ -1,4 +1,5 @@
 ﻿using CsvHelper;
+using CsvHelper.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -21,6 +22,15 @@ public static class CsvReadWriteHelper
         using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
         {
             return csv.GetRecords<T>().ToList<T>();
+        }
+    }
+
+    public static async Task WriteToCsv<T>(string filePath, List<T> data)
+    {
+        using (var writer = new StreamWriter(filePath))
+        using (var csv = new CsvWriter(writer, new CsvConfiguration(CultureInfo.InvariantCulture)))
+        {
+            await csv.WriteRecordsAsync(data);
         }
     }
 }

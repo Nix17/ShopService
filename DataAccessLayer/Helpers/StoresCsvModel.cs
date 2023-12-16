@@ -12,6 +12,12 @@ public class StoresCsvModel
     {
     }
 
+    public StoresCsvModel(string storeCode, string storeName)
+    {
+        StoreCode = storeCode;
+        StoreName = storeName;
+    }
+
     public string StoreCode { get; set; }
     public string StoreName { get; set; } = string.Empty;
 }

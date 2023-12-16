@@ -12,6 +12,14 @@ public class ProductsCsvModel
     {
     }
 
+    public ProductsCsvModel(string productName, string storeCode, int quantity, decimal price)
+    {
+        ProductName = productName;
+        StoreCode = storeCode;
+        Quantity = quantity;
+        Price = price;
+    }
+
     public string ProductName { get; set; } = string.Empty;
     public string StoreCode { get; set; }
     public int Quantity { get; set; } = 0;

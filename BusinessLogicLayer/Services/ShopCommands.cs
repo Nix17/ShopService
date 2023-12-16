@@ -19,11 +19,13 @@ public class ShopCommands : IShopCommands
 {
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _uow;
+    private readonly ICsvWriterService _csv;
 
-    public ShopCommands(IMapper mapper, IUnitOfWork uow)
+    public ShopCommands(IMapper mapper, IUnitOfWork uow, ICsvWriterService csv)
     {
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         _uow = uow ?? throw new ArgumentNullException(nameof(uow));
+        _csv = csv;
     }
 
     #region PRODUCTS
@@ -36,6 +38,12 @@ public class ShopCommands : IShopCommands
 
             var obj = _mapper.Map<ProductEntity>(form);
             var res = await _uow.ProductRepo.AddAsync(obj);
+            
+            // WRITE CSV
+            var csvDataStores = await getStores();
+            var csvDataBatches = await getAllBatches();
+            await _csv.WriteCsv(csvDataStores, csvDataBatches);
+
             return new ServiceActionResult<string>(true,res.Id.ToString());
         } catch (Exception ex)
         {
@@ -56,6 +64,11 @@ public class ShopCommands : IShopCommands
             _mapper.Map(form, item);
             await _uow.ProductRepo.UpdateAsync(item);
 
+            // WRITE CSV
+            var csvDataStores = await getStores();
+            var csvDataBatches = await getAllBatches();
+            await _csv.WriteCsv(csvDataStores, csvDataBatches);
+
             return new ServiceActionResult<string>(true, "OK");
         } catch (Exception ex)
         {
@@ -71,6 +84,11 @@ public class ShopCommands : IShopCommands
             if (item == null) throw new Exception("Not found");
 
             await _uow.ProductRepo.DeleteAsync(item);
+
+            // WRITE CSV
+            var csvDataStores = await getStores();
+            var csvDataBatches = await getAllBatches();
+            await _csv.WriteCsv(csvDataStores, csvDataBatches);
 
             return new ServiceActionResult<string>(true, "OK");
         } catch (Exception ex)
@@ -129,6 +147,12 @@ public class ShopCommands : IShopCommands
         {
             var obj = _mapper.Map<StoreEntity>(form);
             var res = await _uow.StoreRepo.AddAsync(obj);
+
+            // WRITE CSV
+            var csvDataStores = await getStores();
+            var csvDataBatches = await getAllBatches();
+            await _csv.WriteCsv(csvDataStores, csvDataBatches);
+
             return new ServiceActionResult<string>(true, res.Id.ToString());
         }
         catch (Exception ex)
@@ -147,6 +171,11 @@ public class ShopCommands : IShopCommands
             _mapper.Map(form, item);
             await _uow.StoreRepo.UpdateAsync(item);
 
+            // WRITE CSV
+            var csvDataStores = await getStores();
+            var csvDataBatches = await getAllBatches();
+            await _csv.WriteCsv(csvDataStores, csvDataBatches);
+
             return new ServiceActionResult<string>(true, "OK");
         }
         catch (Exception ex)
@@ -163,6 +192,12 @@ public class ShopCommands : IShopCommands
             if (item == null) throw new Exception("Not found");
 
             await _uow.StoreRepo.DeleteAsync(item);
+
+
+            // WRITE CSV
+            var csvDataStores = await getStores();
+            var csvDataBatches = await getAllBatches();
+            await _csv.WriteCsv(csvDataStores, csvDataBatches);
 
             return new ServiceActionResult<string>(true, "OK");
         }
@@ -193,14 +228,20 @@ public class ShopCommands : IShopCommands
     {
         try
         {
-            var list = await _uow.StoreRepo.GetAllAsync();
-            var res = _mapper.Map<List<StoreDTO>>(list);
+            var res = await getStores();
             return new ServiceActionResult<List<StoreDTO>>(true, "OK", res);
         }
         catch (Exception ex)
         {
             return new ServiceActionResult<List<StoreDTO>>(ex);
         }
+    }
+
+    private async Task<List<StoreDTO>> getStores()
+    {
+        var list = await _uow.StoreRepo.GetAllAsync();
+        var res = _mapper.Map<List<StoreDTO>>(list);
+        return res;
     }
 
     public async Task<ServiceActionResult<List<StoreDTO>>> SearchStore(string search)
@@ -231,6 +272,12 @@ public class ShopCommands : IShopCommands
 
             var obj = _mapper.Map<ProductBatchEntity>(form);
             var res = await _uow.ProductBatchRepo.AddAsync(obj);
+
+            // WRITE CSV
+            var csvDataStores = await getStores();
+            var csvDataBatches = await getAllBatches();
+            await _csv.WriteCsv(csvDataStores, csvDataBatches);
+
             return new ServiceActionResult<string>(true, res.Id.ToString());
         }
         catch (Exception ex)
@@ -256,7 +303,20 @@ public class ShopCommands : IShopCommands
                         await _uow.ProductBatchRepo.AddAsync(obj);
                     }
                 }
+                else
+                {
+                    var obj = _mapper.Map<ProductBatchEntity>(item);
+                    await _uow.ProductBatchRepo.AddAsync(obj);
+                }
             }
+
+            await _uow.SaveChangesAsync();
+
+            // WRITE CSV
+            var csvDataStores = await getStores();
+            var csvDataBatches = await getAllBatches();
+            await _csv.WriteCsv(csvDataStores, csvDataBatches);
+
             return new ServiceActionResult<string>(true, "OK");
         } catch (Exception ex)
         {
@@ -273,6 +333,12 @@ public class ShopCommands : IShopCommands
 
             _mapper.Map(form, item);
             await _uow.ProductBatchRepo.UpdateAsync(item);
+
+
+            // WRITE CSV
+            var csvDataStores = await getStores();
+            var csvDataBatches = await getAllBatches();
+            await _csv.WriteCsv(csvDataStores, csvDataBatches);
 
             return new ServiceActionResult<string>(true, "OK");
         }
@@ -308,6 +374,12 @@ public class ShopCommands : IShopCommands
                 dict.Remove(dictItem.Key);
             }
 
+
+            // WRITE CSV
+            var csvDataStores = await getStores();
+            var csvDataBatches = await getAllBatches();
+            await _csv.WriteCsv(csvDataStores, csvDataBatches);
+
             return new ServiceActionResult<string>(true, "OK");
 
         } catch (Exception ex)
@@ -324,6 +396,11 @@ public class ShopCommands : IShopCommands
             if (item == null) throw new Exception("Not found");
 
             await _uow.ProductBatchRepo.DeleteAsync(item);
+
+            // WRITE CSV
+            var csvDataStores = await getStores();
+            var csvDataBatches = await getAllBatches();
+            await _csv.WriteCsv(csvDataStores, csvDataBatches);
 
             return new ServiceActionResult<string>(true, "OK");
         }
@@ -354,25 +431,32 @@ public class ShopCommands : IShopCommands
     {
         try
         {
-            var list = await _uow.ProductBatchRepo.FindAllAsync(o => o.Quantity > 0);
-
-            foreach(var item in list)
-            {
-                var ps = await _uow.ProductRepo.GetAllAsync();
-                var ss = await _uow.StoreRepo.GetAllAsync();
-                var product = ps.FirstOrDefault(o => o.Id == item.ProductId);
-                var store = ss.FirstOrDefault(o => o.Id == item.StoreId);
-                item.Product = product;
-                item.Store = store;
-            }
-
-            var res = _mapper.Map<List<ProductBatchDTO>>(list);
+            var res = await getAllBatches();
             return new ServiceActionResult<List<ProductBatchDTO>>(true, "OK", res);
         }
         catch (Exception ex)
         {
             return new ServiceActionResult<List<ProductBatchDTO>>(ex);
         }
+    }
+
+    private async Task<List<ProductBatchDTO>> getAllBatches()
+    {
+        var list = await _uow.ProductBatchRepo.FindAllAsync(o => o.Quantity > 0);
+
+        foreach (var item in list)
+        {
+            var ps = await _uow.ProductRepo.GetAllAsync();
+            var ss = await _uow.StoreRepo.GetAllAsync();
+            var product = ps.FirstOrDefault(o => o.Id == item.ProductId);
+            var store = ss.FirstOrDefault(o => o.Id == item.StoreId);
+            item.Product = product;
+            item.Store = store;
+        }
+
+        var res = _mapper.Map<List<ProductBatchDTO>>(list);
+
+        return res;
     }
     #endregion
 }
