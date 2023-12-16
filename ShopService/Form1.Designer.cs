@@ -309,6 +309,7 @@
             btnSearchMinStore.TabIndex = 21;
             btnSearchMinStore.Text = "Поиск магазина с наименьшей стоимостью покупки";
             btnSearchMinStore.UseVisualStyleBackColor = true;
+            btnSearchMinStore.Click += btnSearchMinStore_Click;
             // 
             // textBoxSearchCost
             // 

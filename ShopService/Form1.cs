@@ -9,6 +9,8 @@ namespace ShopService
 {
     public partial class Form1 : Form
     {
+        private bool isRefreshDtGVbyCmb = true;
+
         private IShopCommands _cmds;
 
         public List<ProductDTO> Products = new List<ProductDTO>();
@@ -72,6 +74,12 @@ namespace ShopService
 
         private async Task FillDataGridBuyerBatches()
         {
+            if (!isRefreshDtGVbyCmb)
+            {
+                isRefreshDtGVbyCmb = true;
+                return;
+            }
+
             var storeName = (cmbBoxBuyerStores.SelectedItem as StoreDTO).Name;
             if (storeName == ENUM_NAMES.EMPTY_STORE_NAME)
             {
@@ -222,6 +230,8 @@ namespace ShopService
             await FillDataGridBuyerBatches();
         }
 
+
+        // TODO
         private void cmbBoxProviderStores_SelectedIndexChanged(object sender, EventArgs e)
         {
 
@@ -236,6 +246,8 @@ namespace ShopService
 
             if (dtGridBuyerBatches.Rows[e.RowIndex].Cells[3].Value == null) return;
             if (dtGridBuyerBatches.Rows[e.RowIndex].Cells[3].Value.ToString() == "") return;
+            if (dtGridBuyerBatches.Rows[e.RowIndex].Cells[2].Value == null) return;
+            if (dtGridBuyerBatches.Rows[e.RowIndex].Cells[2].Value.ToString() == "") return;
 
             int currentCount = Convert.ToInt32(dtGridBuyerBatches.Rows[e.RowIndex].Cells[3].Value);
             decimal currentPrice = Convert.ToDecimal(dtGridBuyerBatches.Rows[e.RowIndex].Cells[2].Value);
@@ -256,6 +268,93 @@ namespace ShopService
             }
 
             textBoxAllCost.Text = allCost.ToString();
+        }
+
+        private void btnSearchMinStore_Click(object sender, EventArgs e)
+        {
+            // Словарь, в котором будут храниться - ИД товара (key) и количество (value)
+            var dictProducts = new Dictionary<int, int>();
+
+            for (int i = 0; i < dtGridBuyerBatches.Rows.Count; i++)
+            {
+                if (dtGridBuyerBatches.Rows[i].Cells[3].Value.ToString() != "")
+                {
+                    var key = Convert.ToInt32(dtGridBuyerBatches.Rows[i].Cells[0].Value);
+                    var value = Convert.ToInt32(dtGridBuyerBatches.Rows[i].Cells[3].Value);
+                    dictProducts.Add(key, value);
+                }
+            }
+
+            // Словарь, в котором будут храниться - ИД магазина (key) и общая стоимость искомых товаров (количество * цена) (value)
+            var dictStores = new Dictionary<int, decimal>();
+
+            var storeIds = Stores.Select(x => x.Id);
+            foreach(var storeId in storeIds)
+            {
+                var listProducts = ProductBatches.Where(o => o.Store.Id == storeId).ToList();
+
+                var isPotentially = listProducts.FindAll(o => dictProducts.Keys.Contains(o.Product.Id));
+                if (isPotentially.Count == dictProducts.Keys.Count)
+                {
+                    decimal totalCost = 0;
+                    while(isPotentially.Count > 0)
+                    {
+                        bool isCanAdd = true;
+                        var item = isPotentially.First();
+                        var dictItem = dictProducts.FirstOrDefault(o => o.Key == item.Product.Id);
+                        if (dictItem.Value > item.Quantity)
+                        {
+                            isCanAdd = false;
+                            break;
+                        }
+                        totalCost = totalCost + (item.Price * dictItem.Value);
+                        isPotentially.RemoveAt(0);
+                    }
+                    
+                    if (totalCost > 0) dictStores.Add(storeId, totalCost);
+                }
+            }
+
+            if (dictStores.Count == 0)
+            {
+                MessageBox.Show("Нельзя найти товары в одном магазине!");
+                return;
+            }
+
+            // Создаем список ключ-значение из словаря
+            var sortedList = dictStores.ToList();
+
+            // Сортируем список по значениям в убывающем порядке
+            sortedList.Sort((pair1, pair2) => pair1.Value.CompareTo(pair2.Value));
+
+            var findedId = sortedList[0].Key;
+
+
+
+            for (int idx = 0; idx < cmbBoxBuyerStores.Items.Count; idx++)
+            {
+                if ((cmbBoxBuyerStores.Items[idx] as StoreDTO).Id == findedId)
+                {
+                    cmbBoxBuyerStores.SelectedIndex = idx;
+                    isRefreshDtGVbyCmb = false;
+                    break;
+                }
+            }
+
+            foreach(var item in dictProducts)
+            {
+                var batch = ProductBatches.Find(o => o.Store.Id == findedId && o.Product.Id == item.Key);
+                for(int idx = 0; idx < dtGridBuyerBatches.Rows.Count; idx++)
+                {
+                    var dtIdCol = Convert.ToInt32(dtGridBuyerBatches.Rows[idx].Cells[0].Value);
+                    if (dtIdCol == batch.Id)
+                    {
+                        dtGridBuyerBatches.Rows[idx].Cells[3].Value = item.Value;
+                        break;
+                    }
+                }
+            }
+
         }
     }
 }
