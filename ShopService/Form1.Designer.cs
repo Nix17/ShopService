@@ -55,18 +55,19 @@
             textBox3 = new TextBox();
             label7 = new Label();
             button4 = new Button();
-            dataGridView2 = new DataGridView();
+            dtGridBuyerBatches = new DataGridView();
+            label6 = new Label();
+            cmbBoxBuyerStores = new ComboBox();
+            ExportGoodId = new DataGridViewTextBoxColumn();
             ExportGoodName = new DataGridViewTextBoxColumn();
             ExportGoodPrice = new DataGridViewTextBoxColumn();
             ExportAmount = new DataGridViewTextBoxColumn();
             Total = new DataGridViewTextBoxColumn();
-            label6 = new Label();
-            comboBox2 = new ComboBox();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dtGridProviderProducts).BeginInit();
             tabPage2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView2).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dtGridBuyerBatches).BeginInit();
             SuspendLayout();
             // 
             // tabControl1
@@ -216,6 +217,7 @@
             // 
             // dtGridProviderProducts
             // 
+            dtGridProviderProducts.AllowUserToAddRows = false;
             dtGridProviderProducts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dtGridProviderProducts.Columns.AddRange(new DataGridViewColumn[] { ImportGoodId, ImportGoodName, ImportGoodPrice, ImportAmount });
             dtGridProviderProducts.Location = new Point(31, 260);
@@ -285,9 +287,9 @@
             tabPage2.Controls.Add(textBox3);
             tabPage2.Controls.Add(label7);
             tabPage2.Controls.Add(button4);
-            tabPage2.Controls.Add(dataGridView2);
+            tabPage2.Controls.Add(dtGridBuyerBatches);
             tabPage2.Controls.Add(label6);
-            tabPage2.Controls.Add(comboBox2);
+            tabPage2.Controls.Add(cmbBoxBuyerStores);
             tabPage2.Location = new Point(4, 29);
             tabPage2.Margin = new Padding(3, 4, 3, 4);
             tabPage2.Name = "tabPage2";
@@ -364,17 +366,48 @@
             button4.UseVisualStyleBackColor = true;
             button4.UseWaitCursor = true;
             // 
-            // dataGridView2
+            // dtGridBuyerBatches
             // 
-            dataGridView2.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView2.Columns.AddRange(new DataGridViewColumn[] { ExportGoodName, ExportGoodPrice, ExportAmount, Total });
-            dataGridView2.Location = new Point(17, 83);
-            dataGridView2.Margin = new Padding(3, 4, 3, 4);
-            dataGridView2.Name = "dataGridView2";
-            dataGridView2.RowHeadersWidth = 51;
-            dataGridView2.RowTemplate.Height = 25;
-            dataGridView2.Size = new Size(609, 200);
-            dataGridView2.TabIndex = 10;
+            dtGridBuyerBatches.AllowUserToAddRows = false;
+            dtGridBuyerBatches.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dtGridBuyerBatches.Columns.AddRange(new DataGridViewColumn[] { ExportGoodId, ExportGoodName, ExportGoodPrice, ExportAmount, Total });
+            dtGridBuyerBatches.Location = new Point(17, 83);
+            dtGridBuyerBatches.Margin = new Padding(3, 4, 3, 4);
+            dtGridBuyerBatches.Name = "dtGridBuyerBatches";
+            dtGridBuyerBatches.RowHeadersWidth = 51;
+            dtGridBuyerBatches.RowTemplate.Height = 25;
+            dtGridBuyerBatches.Size = new Size(609, 200);
+            dtGridBuyerBatches.TabIndex = 10;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(17, 37);
+            label6.Name = "label6";
+            label6.Size = new Size(69, 20);
+            label6.TabIndex = 9;
+            label6.Text = "Магазин";
+            label6.UseWaitCursor = true;
+            // 
+            // cmbBoxBuyerStores
+            // 
+            cmbBoxBuyerStores.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbBoxBuyerStores.FormattingEnabled = true;
+            cmbBoxBuyerStores.Location = new Point(86, 32);
+            cmbBoxBuyerStores.Margin = new Padding(3, 4, 3, 4);
+            cmbBoxBuyerStores.Name = "cmbBoxBuyerStores";
+            cmbBoxBuyerStores.Size = new Size(162, 28);
+            cmbBoxBuyerStores.TabIndex = 8;
+            cmbBoxBuyerStores.UseWaitCursor = true;
+            // 
+            // ExportGoodId
+            // 
+            ExportGoodId.HeaderText = "Id";
+            ExportGoodId.MinimumWidth = 6;
+            ExportGoodId.Name = "ExportGoodId";
+            ExportGoodId.ReadOnly = true;
+            ExportGoodId.Visible = false;
+            ExportGoodId.Width = 125;
             // 
             // ExportGoodName
             // 
@@ -407,26 +440,6 @@
             Total.ReadOnly = true;
             Total.Width = 125;
             // 
-            // label6
-            // 
-            label6.AutoSize = true;
-            label6.Location = new Point(17, 37);
-            label6.Name = "label6";
-            label6.Size = new Size(69, 20);
-            label6.TabIndex = 9;
-            label6.Text = "Магазин";
-            label6.UseWaitCursor = true;
-            // 
-            // comboBox2
-            // 
-            comboBox2.FormattingEnabled = true;
-            comboBox2.Location = new Point(86, 32);
-            comboBox2.Margin = new Padding(3, 4, 3, 4);
-            comboBox2.Name = "comboBox2";
-            comboBox2.Size = new Size(162, 28);
-            comboBox2.TabIndex = 8;
-            comboBox2.UseWaitCursor = true;
-            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -444,7 +457,7 @@
             ((System.ComponentModel.ISupportInitialize)dtGridProviderProducts).EndInit();
             tabPage2.ResumeLayout(false);
             tabPage2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView2).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dtGridBuyerBatches).EndInit();
             ResumeLayout(false);
         }
 
@@ -458,19 +471,15 @@
         private DataGridView dtGridProviderProducts;
         private Button btnProviderDelivery;
         private Button button4;
-        private DataGridView dataGridView2;
+        private DataGridView dtGridBuyerBatches;
         private Label label6;
-        private ComboBox comboBox2;
+        private ComboBox cmbBoxBuyerStores;
         private Label label7;
         private TextBox textBox3;
         private TextBox textBox5;
         private Label label8;
         private Button button5;
         private Button button6;
-        private DataGridViewTextBoxColumn ExportGoodName;
-        private DataGridViewTextBoxColumn ExportGoodPrice;
-        private DataGridViewTextBoxColumn ExportAmount;
-        private DataGridViewTextBoxColumn Total;
         private Button btnAddProviderProduct;
         private Label label3;
         private TextBox txtBoxProviderProductName;
@@ -484,5 +493,10 @@
         private DataGridViewTextBoxColumn ImportGoodName;
         private DataGridViewTextBoxColumn ImportGoodPrice;
         private DataGridViewTextBoxColumn ImportAmount;
+        private DataGridViewTextBoxColumn ExportGoodId;
+        private DataGridViewTextBoxColumn ExportGoodName;
+        private DataGridViewTextBoxColumn ExportGoodPrice;
+        private DataGridViewTextBoxColumn ExportAmount;
+        private DataGridViewTextBoxColumn Total;
     }
 }

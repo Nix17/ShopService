@@ -12,7 +12,7 @@ public class ProductBatchForm
     {
     }
 
-    public ProductBatchForm(Guid productId, Guid storeId, int quantity, decimal price)
+    public ProductBatchForm(int productId, int storeId, int quantity, decimal price)
     {
         ProductId = productId;
         StoreId = storeId;
@@ -20,8 +20,8 @@ public class ProductBatchForm
         Price = price;
     }
 
-    public Guid ProductId { get; set; }
-    public Guid StoreId { get; set; }
+    public int ProductId { get; set; }
+    public int StoreId { get; set; }
     public int Quantity { get; set; }
     public decimal Price { get; set; }
 }

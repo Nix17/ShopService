@@ -32,6 +32,7 @@ public interface IShopCommands
 
     #region PRODUCT_BATCH
     Task<ServiceActionResult<string>> AddProductBatch(ProductBatchForm form);
+    Task<ServiceActionResult<string>> AddListProductBatch(List<ProductBatchForm> data);
     Task<ServiceActionResult<string>> UpdateProductBatch(int id, ProductBatchForm form);
     Task<ServiceActionResult<string>> DeleteProductBatch(int id);
     Task<ServiceActionResult<ProductBatchDTO>> GetProductBatch(int id);

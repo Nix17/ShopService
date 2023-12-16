@@ -36,11 +36,19 @@ namespace ShopService
             ProductBatches = resBatches.Result;
 
             FillDataGridProviderProducts();
+            FillDataGridBuyerBatches();
 
             cmbBoxProviderStores.Items.Clear();
             cmbBoxProviderStores.Items.AddRange(Stores.ToArray());
             cmbBoxProviderStores.DisplayMember = "Name";
             cmbBoxProviderStores.ValueMember = "Id";
+            cmbBoxProviderStores.SelectedIndex = 0;
+
+            cmbBoxBuyerStores.Items.Clear();
+            cmbBoxBuyerStores.Items.AddRange(Stores.ToArray());
+            cmbBoxBuyerStores.DisplayMember = "Name";
+            cmbBoxBuyerStores.ValueMember = "Id";
+            cmbBoxBuyerStores.SelectedIndex = 0;
         }
 
         private void FillDataGridProviderProducts()
@@ -54,6 +62,23 @@ namespace ShopService
                 dtGridProviderProducts.Rows[idxRow].Cells[1].Value = product.Name;
                 dtGridProviderProducts.Rows[idxRow].Cells[2].Value = "";
                 dtGridProviderProducts.Rows[idxRow].Cells[3].Value = "";
+
+                idxRow++;
+            }
+        }
+
+        private void FillDataGridBuyerBatches()
+        {
+            dtGridBuyerBatches.Rows.Clear();
+            int idxRow = 0;
+            foreach(var item in ProductBatches)
+            {
+                dtGridBuyerBatches.Rows.Add();
+                dtGridBuyerBatches.Rows[idxRow].Cells[0].Value = item.Id;
+                dtGridBuyerBatches.Rows[idxRow].Cells[1].Value = item.Product.Name;
+                dtGridBuyerBatches.Rows[idxRow].Cells[2].Value = item.Price;
+                dtGridBuyerBatches.Rows[idxRow].Cells[3].Value = item.Quantity;
+                dtGridBuyerBatches.Rows[idxRow].Cells[4].Value = Math.Round(Convert.ToDecimal(item.Price) * Convert.ToDecimal(item.Quantity), 2);
 
                 idxRow++;
             }
@@ -102,32 +127,42 @@ namespace ShopService
             }
         }
 
-        private void btnProviderDelivery_Click(object sender, EventArgs e)
+        private async void btnProviderDelivery_Click(object sender, EventArgs e)
         {
-            var l = MakeDelivery();
+            var listForm = MakeDelivery();
+
+            var res = await _cmds.AddListProductBatch(listForm);
+            if (res.IsSuccess)
+            {
+                UpdateAllData();
+            }
+            else {
+                MessageBox.Show($"{res.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private List<ProductBatchForm> MakeDelivery()
         {
             var list = new List<ProductBatchForm>();
 
-            for (int i = 0; i <= dtGridProviderProducts.Rows.Count; i++)
+            for (int i = 0; i < dtGridProviderProducts.Rows.Count; i++)
             {
 
-                //if (string.IsNullOrEmpty(dtGridProviderProducts.Rows[i].Cells[2].Value.ToString()))
-                //{
-                //    continue;
-                //}
+                var cond1 = string.IsNullOrEmpty(dtGridProviderProducts.Rows[i].Cells[2].Value.ToString());
+                var cond2 = string.IsNullOrEmpty(dtGridProviderProducts.Rows[i].Cells[3].Value.ToString());
 
-                //if (string.IsNullOrEmpty(dtGridProviderProducts.Rows[i].Cells[3].Value.ToString()))
-                //{
-                //    continue;
-                //}
+                if (!(cond1 && cond2))
+                {
+                    int productId = Convert.ToInt32(dtGridProviderProducts.Rows[i].Cells[0].Value);
+                    decimal price = Convert.ToDecimal(dtGridProviderProducts.Rows[i].Cells[2].Value);
+                    int quantity = Convert.ToInt32(dtGridProviderProducts.Rows[i].Cells[3].Value);
+                    var store = cmbBoxProviderStores.SelectedItem as StoreDTO;
 
-                int productId = Convert.ToInt32(dtGridProviderProducts.Rows[i].Cells[0].Value);
-                decimal price = Convert.ToDecimal(dtGridProviderProducts.Rows[i].Cells[2].Value);
-                int quantity = Convert.ToInt32(dtGridProviderProducts.Rows[i].Cells[3].Value);
-                var store = cmbBoxProviderStores.SelectedItem;
+
+                    list.Add(new ProductBatchForm(productId, store.Id, quantity, price));
+                }
+
+                
             }
 
             return list;

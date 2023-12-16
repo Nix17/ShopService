@@ -223,11 +223,42 @@ public class ShopCommands : IShopCommands
     {
         try
         {
+            var isExisted = await _uow.ProductBatchRepo.FindAsync(o => o.ProductId == form.ProductId && o.StoreId == form.StoreId);
+            if(isExisted != null)
+            {
+                if (isExisted.Quantity > 0) return new ServiceActionResult<string>(true, "OK");
+            }
+
             var obj = _mapper.Map<ProductBatchEntity>(form);
             var res = await _uow.ProductBatchRepo.AddAsync(obj);
             return new ServiceActionResult<string>(true, res.Id.ToString());
         }
         catch (Exception ex)
+        {
+            return new ServiceActionResult<string>(ex);
+        }
+    }
+
+    public async Task<ServiceActionResult<string>> AddListProductBatch(List<ProductBatchForm> data)
+    {
+        try
+        {
+            if (data.Count == 0) return new ServiceActionResult<string>(true, "OK");
+
+            foreach (var item in data)
+            {
+                var isExisted = await _uow.ProductBatchRepo.FindAsync(o => o.ProductId == item.ProductId && o.StoreId == item.StoreId);
+                if (isExisted != null)
+                {
+                    if (isExisted.Quantity == 0)
+                    {
+                        var obj = _mapper.Map<ProductBatchEntity>(item);
+                        await _uow.ProductBatchRepo.AddAsync(obj);
+                    }
+                }
+            }
+            return new ServiceActionResult<string>(true, "OK");
+        } catch (Exception ex)
         {
             return new ServiceActionResult<string>(ex);
         }
