@@ -2,6 +2,8 @@ using BusinessLogicLayer.DTO.Product;
 using BusinessLogicLayer.DTO.ProductBatch;
 using BusinessLogicLayer.DTO.Store;
 using BusinessLogicLayer.Services.Interfaces;
+using ShopService.Enums;
+using System.Windows.Forms;
 
 namespace ShopService
 {
@@ -35,9 +37,6 @@ namespace ShopService
             Stores = resStores.Result;
             ProductBatches = resBatches.Result;
 
-            FillDataGridProviderProducts();
-            FillDataGridBuyerBatches();
-
             cmbBoxProviderStores.Items.Clear();
             cmbBoxProviderStores.Items.AddRange(Stores.ToArray());
             cmbBoxProviderStores.DisplayMember = "Name";
@@ -45,13 +44,17 @@ namespace ShopService
             cmbBoxProviderStores.SelectedIndex = 0;
 
             cmbBoxBuyerStores.Items.Clear();
+            cmbBoxBuyerStores.Items.Add(new StoreDTO(ENUM_NAMES.EMPTY_STORE_NAME));
             cmbBoxBuyerStores.Items.AddRange(Stores.ToArray());
             cmbBoxBuyerStores.DisplayMember = "Name";
             cmbBoxBuyerStores.ValueMember = "Id";
             cmbBoxBuyerStores.SelectedIndex = 0;
+
+            await FillDataGridProviderProducts();
+            await FillDataGridBuyerBatches();
         }
 
-        private void FillDataGridProviderProducts()
+        private async Task FillDataGridProviderProducts()
         {
             dtGridProviderProducts.Rows.Clear();
             int idxRow = 0;
@@ -67,20 +70,64 @@ namespace ShopService
             }
         }
 
-        private void FillDataGridBuyerBatches()
+        private async Task FillDataGridBuyerBatches()
         {
-            dtGridBuyerBatches.Rows.Clear();
-            int idxRow = 0;
-            foreach(var item in ProductBatches)
+            var storeName = (cmbBoxBuyerStores.SelectedItem as StoreDTO).Name;
+            if (storeName == ENUM_NAMES.EMPTY_STORE_NAME)
             {
-                dtGridBuyerBatches.Rows.Add();
-                dtGridBuyerBatches.Rows[idxRow].Cells[0].Value = item.Id;
-                dtGridBuyerBatches.Rows[idxRow].Cells[1].Value = item.Product.Name;
-                dtGridBuyerBatches.Rows[idxRow].Cells[2].Value = item.Price;
-                dtGridBuyerBatches.Rows[idxRow].Cells[3].Value = item.Quantity;
-                dtGridBuyerBatches.Rows[idxRow].Cells[4].Value = Math.Round(Convert.ToDecimal(item.Price) * Convert.ToDecimal(item.Quantity), 2);
+                textBoxSearchCost.Enabled = false;
+                btnSearchCost.Enabled = false;
+                btnBuy.Enabled = false;
+                btnSearchMinStore.Enabled = true;
 
-                idxRow++;
+                dtGridBuyerBatches.Columns[2].Visible = false;
+                //dtGridBuyerBatches.Columns[3].Visible = false;
+                dtGridBuyerBatches.Columns[4].Visible = false;
+
+
+                dtGridBuyerBatches.Rows.Clear();
+                int idxRow = 0;
+                foreach (var item in Products)
+                {
+                    dtGridBuyerBatches.Rows.Add();
+                    dtGridBuyerBatches.Rows[idxRow].Cells[0].Value = item.Id;
+                    dtGridBuyerBatches.Rows[idxRow].Cells[1].Value = item.Name;
+                    dtGridBuyerBatches.Rows[idxRow].Cells[2].Value = "";
+                    dtGridBuyerBatches.Rows[idxRow].Cells[3].Value = "";
+                    dtGridBuyerBatches.Rows[idxRow].Cells[4].Value = "";
+
+                    idxRow++;
+                }
+            }
+            else
+            {
+                textBoxSearchCost.Enabled = true;
+                btnSearchCost.Enabled = true;
+                btnBuy.Enabled = true;
+                btnSearchMinStore.Enabled = false;
+
+
+                dtGridBuyerBatches.Columns[2].Visible = true;
+                //dtGridBuyerBatches.Columns[3].Visible = true;
+                dtGridBuyerBatches.Columns[4].Visible = true;
+
+                var selStoreId = (cmbBoxBuyerStores.SelectedItem as StoreDTO).Id;
+
+                var batches = ProductBatches.FindAll(o => o.Store.Id == selStoreId);
+
+                dtGridBuyerBatches.Rows.Clear();
+                int idxRow = 0;
+                foreach (var item in batches)
+                {
+                    dtGridBuyerBatches.Rows.Add();
+                    dtGridBuyerBatches.Rows[idxRow].Cells[0].Value = item.Id;
+                    dtGridBuyerBatches.Rows[idxRow].Cells[1].Value = item.Product.Name;
+                    dtGridBuyerBatches.Rows[idxRow].Cells[2].Value = item.Price;
+                    dtGridBuyerBatches.Rows[idxRow].Cells[3].Value = "";
+                    dtGridBuyerBatches.Rows[idxRow].Cells[4].Value = "";
+
+                    idxRow++;
+                }
             }
         }
 
@@ -136,7 +183,8 @@ namespace ShopService
             {
                 UpdateAllData();
             }
-            else {
+            else
+            {
                 MessageBox.Show($"{res.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -162,10 +210,52 @@ namespace ShopService
                     list.Add(new ProductBatchForm(productId, store.Id, quantity, price));
                 }
 
-                
+
             }
 
             return list;
+        }
+
+        private async void cmbBoxBuyerStores_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            textBoxAllCost.Text = string.Empty;
+            await FillDataGridBuyerBatches();
+        }
+
+        private void cmbBoxProviderStores_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dtGridBuyerBatches_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            if (cmbBoxBuyerStores.SelectedItem == null) return;
+
+            var storeName = (cmbBoxBuyerStores.SelectedItem as StoreDTO).Name;
+            if (storeName == ENUM_NAMES.EMPTY_STORE_NAME && e.ColumnIndex != 3) return;
+
+            if (dtGridBuyerBatches.Rows[e.RowIndex].Cells[3].Value == null) return;
+            if (dtGridBuyerBatches.Rows[e.RowIndex].Cells[3].Value.ToString() == "") return;
+
+            int currentCount = Convert.ToInt32(dtGridBuyerBatches.Rows[e.RowIndex].Cells[3].Value);
+            decimal currentPrice = Convert.ToDecimal(dtGridBuyerBatches.Rows[e.RowIndex].Cells[2].Value);
+
+            dtGridBuyerBatches.Rows[e.RowIndex].Cells[4].Value = (currentCount * currentPrice);
+
+            decimal allCost = 0;
+
+            for (int i = 0; i < dtGridBuyerBatches.Rows.Count; i++)
+            {
+                if (dtGridBuyerBatches.Rows[i].Cells[3].Value.ToString() != "")
+                {
+                    int count = Convert.ToInt32(dtGridBuyerBatches.Rows[i].Cells[3].Value);
+                    decimal price = Convert.ToDecimal(dtGridBuyerBatches.Rows[i].Cells[2].Value);
+
+                    allCost = allCost + (count * price);
+                }
+            }
+
+            textBoxAllCost.Text = allCost.ToString();
         }
     }
 }

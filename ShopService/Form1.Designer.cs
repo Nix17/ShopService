@@ -48,21 +48,21 @@
             label5 = new Label();
             cmbBoxProviderStores = new ComboBox();
             tabPage2 = new TabPage();
-            button6 = new Button();
-            textBox5 = new TextBox();
+            btnSearchMinStore = new Button();
+            textBoxSearchCost = new TextBox();
             label8 = new Label();
-            button5 = new Button();
-            textBox3 = new TextBox();
+            btnSearchCost = new Button();
+            textBoxAllCost = new TextBox();
             label7 = new Label();
-            button4 = new Button();
+            btnBuy = new Button();
             dtGridBuyerBatches = new DataGridView();
-            label6 = new Label();
-            cmbBoxBuyerStores = new ComboBox();
             ExportGoodId = new DataGridViewTextBoxColumn();
             ExportGoodName = new DataGridViewTextBoxColumn();
             ExportGoodPrice = new DataGridViewTextBoxColumn();
             ExportAmount = new DataGridViewTextBoxColumn();
             Total = new DataGridViewTextBoxColumn();
+            label6 = new Label();
+            cmbBoxBuyerStores = new ComboBox();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dtGridProviderProducts).BeginInit();
@@ -277,16 +277,17 @@
             cmbBoxProviderStores.Name = "cmbBoxProviderStores";
             cmbBoxProviderStores.Size = new Size(230, 28);
             cmbBoxProviderStores.TabIndex = 4;
+            cmbBoxProviderStores.SelectedIndexChanged += cmbBoxProviderStores_SelectedIndexChanged;
             // 
             // tabPage2
             // 
-            tabPage2.Controls.Add(button6);
-            tabPage2.Controls.Add(textBox5);
+            tabPage2.Controls.Add(btnSearchMinStore);
+            tabPage2.Controls.Add(textBoxSearchCost);
             tabPage2.Controls.Add(label8);
-            tabPage2.Controls.Add(button5);
-            tabPage2.Controls.Add(textBox3);
+            tabPage2.Controls.Add(btnSearchCost);
+            tabPage2.Controls.Add(textBoxAllCost);
             tabPage2.Controls.Add(label7);
-            tabPage2.Controls.Add(button4);
+            tabPage2.Controls.Add(btnBuy);
             tabPage2.Controls.Add(dtGridBuyerBatches);
             tabPage2.Controls.Add(label6);
             tabPage2.Controls.Add(cmbBoxBuyerStores);
@@ -299,23 +300,23 @@
             tabPage2.Text = "Покупатель";
             tabPage2.UseVisualStyleBackColor = true;
             // 
-            // button6
+            // btnSearchMinStore
             // 
-            button6.Location = new Point(17, 320);
-            button6.Margin = new Padding(3, 4, 3, 4);
-            button6.Name = "button6";
-            button6.Size = new Size(251, 56);
-            button6.TabIndex = 21;
-            button6.Text = "Поиск магазина с наименьшей стоимостью покупки";
-            button6.UseVisualStyleBackColor = true;
+            btnSearchMinStore.Location = new Point(17, 320);
+            btnSearchMinStore.Margin = new Padding(3, 4, 3, 4);
+            btnSearchMinStore.Name = "btnSearchMinStore";
+            btnSearchMinStore.Size = new Size(251, 56);
+            btnSearchMinStore.TabIndex = 21;
+            btnSearchMinStore.Text = "Поиск магазина с наименьшей стоимостью покупки";
+            btnSearchMinStore.UseVisualStyleBackColor = true;
             // 
-            // textBox5
+            // textBoxSearchCost
             // 
-            textBox5.Location = new Point(86, 411);
-            textBox5.Margin = new Padding(3, 4, 3, 4);
-            textBox5.Name = "textBox5";
-            textBox5.Size = new Size(83, 27);
-            textBox5.TabIndex = 16;
+            textBoxSearchCost.Location = new Point(86, 411);
+            textBoxSearchCost.Margin = new Padding(3, 4, 3, 4);
+            textBoxSearchCost.Name = "textBoxSearchCost";
+            textBoxSearchCost.Size = new Size(83, 27);
+            textBoxSearchCost.TabIndex = 16;
             // 
             // label8
             // 
@@ -326,24 +327,25 @@
             label8.TabIndex = 15;
             label8.Text = "Сумма";
             // 
-            // button5
+            // btnSearchCost
             // 
-            button5.Location = new Point(183, 411);
-            button5.Margin = new Padding(3, 4, 3, 4);
-            button5.Name = "button5";
-            button5.Size = new Size(86, 31);
-            button5.TabIndex = 14;
-            button5.Text = "Поиск";
-            button5.UseVisualStyleBackColor = true;
+            btnSearchCost.Location = new Point(183, 411);
+            btnSearchCost.Margin = new Padding(3, 4, 3, 4);
+            btnSearchCost.Name = "btnSearchCost";
+            btnSearchCost.Size = new Size(86, 31);
+            btnSearchCost.TabIndex = 14;
+            btnSearchCost.Text = "Поиск";
+            btnSearchCost.UseVisualStyleBackColor = true;
             // 
-            // textBox3
+            // textBoxAllCost
             // 
-            textBox3.Location = new Point(408, 32);
-            textBox3.Margin = new Padding(3, 4, 3, 4);
-            textBox3.Name = "textBox3";
-            textBox3.Size = new Size(83, 27);
-            textBox3.TabIndex = 13;
-            textBox3.UseWaitCursor = true;
+            textBoxAllCost.Location = new Point(414, 32);
+            textBoxAllCost.Margin = new Padding(3, 4, 3, 4);
+            textBoxAllCost.Name = "textBoxAllCost";
+            textBoxAllCost.ReadOnly = true;
+            textBoxAllCost.Size = new Size(83, 27);
+            textBoxAllCost.TabIndex = 13;
+            textBoxAllCost.UseWaitCursor = true;
             // 
             // label7
             // 
@@ -355,16 +357,16 @@
             label7.Text = "Стоимость покупки";
             label7.UseWaitCursor = true;
             // 
-            // button4
+            // btnBuy
             // 
-            button4.Location = new Point(518, 32);
-            button4.Margin = new Padding(3, 4, 3, 4);
-            button4.Name = "button4";
-            button4.Size = new Size(109, 31);
-            button4.TabIndex = 11;
-            button4.Text = "Купить";
-            button4.UseVisualStyleBackColor = true;
-            button4.UseWaitCursor = true;
+            btnBuy.Location = new Point(518, 32);
+            btnBuy.Margin = new Padding(3, 4, 3, 4);
+            btnBuy.Name = "btnBuy";
+            btnBuy.Size = new Size(109, 31);
+            btnBuy.TabIndex = 11;
+            btnBuy.Text = "Купить";
+            btnBuy.UseVisualStyleBackColor = true;
+            btnBuy.UseWaitCursor = true;
             // 
             // dtGridBuyerBatches
             // 
@@ -378,27 +380,7 @@
             dtGridBuyerBatches.RowTemplate.Height = 25;
             dtGridBuyerBatches.Size = new Size(609, 200);
             dtGridBuyerBatches.TabIndex = 10;
-            // 
-            // label6
-            // 
-            label6.AutoSize = true;
-            label6.Location = new Point(17, 37);
-            label6.Name = "label6";
-            label6.Size = new Size(69, 20);
-            label6.TabIndex = 9;
-            label6.Text = "Магазин";
-            label6.UseWaitCursor = true;
-            // 
-            // cmbBoxBuyerStores
-            // 
-            cmbBoxBuyerStores.DropDownStyle = ComboBoxStyle.DropDownList;
-            cmbBoxBuyerStores.FormattingEnabled = true;
-            cmbBoxBuyerStores.Location = new Point(86, 32);
-            cmbBoxBuyerStores.Margin = new Padding(3, 4, 3, 4);
-            cmbBoxBuyerStores.Name = "cmbBoxBuyerStores";
-            cmbBoxBuyerStores.Size = new Size(162, 28);
-            cmbBoxBuyerStores.TabIndex = 8;
-            cmbBoxBuyerStores.UseWaitCursor = true;
+            dtGridBuyerBatches.CellValueChanged += dtGridBuyerBatches_CellValueChanged;
             // 
             // ExportGoodId
             // 
@@ -440,6 +422,28 @@
             Total.ReadOnly = true;
             Total.Width = 125;
             // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(17, 37);
+            label6.Name = "label6";
+            label6.Size = new Size(69, 20);
+            label6.TabIndex = 9;
+            label6.Text = "Магазин";
+            label6.UseWaitCursor = true;
+            // 
+            // cmbBoxBuyerStores
+            // 
+            cmbBoxBuyerStores.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbBoxBuyerStores.FormattingEnabled = true;
+            cmbBoxBuyerStores.Location = new Point(86, 32);
+            cmbBoxBuyerStores.Margin = new Padding(3, 4, 3, 4);
+            cmbBoxBuyerStores.Name = "cmbBoxBuyerStores";
+            cmbBoxBuyerStores.Size = new Size(162, 28);
+            cmbBoxBuyerStores.TabIndex = 8;
+            cmbBoxBuyerStores.UseWaitCursor = true;
+            cmbBoxBuyerStores.SelectedIndexChanged += cmbBoxBuyerStores_SelectedIndexChanged;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -470,16 +474,16 @@
         private TabPage tabPage2;
         private DataGridView dtGridProviderProducts;
         private Button btnProviderDelivery;
-        private Button button4;
+        private Button btnBuy;
         private DataGridView dtGridBuyerBatches;
         private Label label6;
         private ComboBox cmbBoxBuyerStores;
         private Label label7;
-        private TextBox textBox3;
-        private TextBox textBox5;
+        private TextBox textBoxAllCost;
+        private TextBox textBoxSearchCost;
         private Label label8;
-        private Button button5;
-        private Button button6;
+        private Button btnSearchCost;
+        private Button btnSearchMinStore;
         private Button btnAddProviderProduct;
         private Label label3;
         private TextBox txtBoxProviderProductName;
